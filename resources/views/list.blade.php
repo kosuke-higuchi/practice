@@ -10,7 +10,7 @@
                 </div>
 
                 <div>
-                    <form action="{{ route('list.search') }}" method="GET">
+                    <form action="{{ route('list') }}" method="GET">
                         <div>
                             <label>キーワード</label>
                             <input type="text" name="keyword" value="">                            
@@ -18,8 +18,9 @@
                         <div>
                             <label>メーカー</label>
                             <select class="form-control" id="company_id" name="company_id">
+                            <option value="">-- 選択してください --</option>
                             @foreach ($companies as $company)
-                            <option value="{{$company->id}}" >{{ $company->company_name }}</option>
+                            <option value="{{$company->id}}" @if(old('company_id') == $company->id) selected @endif>{{ $company->company_name }}</option>
                             @endforeach
                             </select>
                         </div>
@@ -47,10 +48,10 @@
                                     <td>{{ $product->product_name }}</td>
                                     <td>{{ $product->price }}</td>
                                     <td>{{ $product->stock }}</td>
-                                    <td>{{ $product->img_path }}</td>
+                                    <td><img src="{{ asset($product->img_path) }}" width="25%"></td>
                                     <td><a href="{{ route('detail', ['id'=>$product->id]) }}" class="btn">詳細表示</a></td>
                                     <td>
-                                        <form action="{{ route('list.remove', ['id'=>$product->id]) }}" method="POST">
+                                        <form action="{{ route('list.remove', ['id'=>$product->id], ['img_path'=>$product->img_path]) }}" method="POST">
                                         @csrf
                                             <button type="submit" class="btn">削除</button>
                                         </form>

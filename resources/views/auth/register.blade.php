@@ -64,10 +64,15 @@
                         <div class="row mb-0">
                             <div class="col-md-6 offset-md-4">
                                 <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
+                                    登録
+                                </button>
+
+                                <button class="btn btn-primary">
+                                    戻る
                                 </button>
                             </div>
                         </div>
+                        
                     </form>
                 </div>
             </div>

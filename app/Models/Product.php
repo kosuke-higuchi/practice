@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
+
     public function getList() {
         // JOIN
         $products = DB::table('products')
@@ -51,6 +52,7 @@ class Product extends Model
             'price' => $input['price'],
             'stock' => $input['stock'],
             'comment' => $input['comment'],
+            'img_path' => $input['img_path'],
         ]);
     }
 
@@ -62,5 +64,21 @@ class Product extends Model
         ->first();
 
         return $details;
+    }
+
+    public function updateProduct($input, $id) {
+        // 更新処理
+        // ddd($input);
+
+        DB::table('products')
+            ->where('products.id', '=', $id)
+            ->update([
+            'product_name' => $input['product_name'],
+            'company_id' => $input['company_id'],
+            'price' => $input['price'],
+            'stock' => $input['stock'],
+            'comment' => $input['comment'],
+            'img_path' => $input['img_path'],
+        ]);
     }
 }

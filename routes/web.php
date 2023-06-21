@@ -21,9 +21,10 @@ Auth::routes();
 // Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::view('/home', 'home'); //ビュールート
 
-Route::get('/list', [App\Http\Controllers\ProductController::class, 'showList'])->name('list.search');
+Route::get('/list', [App\Http\Controllers\ProductController::class, 'showList'])->name('list');
 Route::get('/regist', [App\Http\Controllers\CompanyController::class, 'showRegistForm'])->name('regist');
 Route::post('/regist', [App\Http\Controllers\ProductController::class, 'registSubmit'])->name('regist.submit');
 Route::get('/detail/{id}', [App\Http\Controllers\ProductController::class, 'showDetail'])->name('detail');
 Route::post('/remove{id}', [App\Http\Controllers\ProductController::class, 'removeList'])->name('list.remove');
 Route::get('/edit/{id}', [App\Http\Controllers\ProductController::class, 'detailEdit'])->name('edit');
+Route::post('/edit/{id}',[App\Http\Controllers\ProductController::class, 'updateSubmit'])->name('update');
