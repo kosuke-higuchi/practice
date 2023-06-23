@@ -67,7 +67,7 @@
                                     登録
                                 </button>
 
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary" onclick="location.href='{{ route('login') }}'">
                                     戻る
                                 </button>
                             </div>

@@ -9,7 +9,7 @@
             </div>
 
             <div>
-                <form action="" method="post" enctype="multipart/form-data">
+                <form action="{{ route('update', ['id'=>$details->id]) }}" method="post" enctype="multipart/form-data">
                     @csrf
 
                     <div>
@@ -63,8 +63,9 @@
 
                     <div class="form-group">
                         <label for="img_path">商品画像</label>
-                        <img src="{{ asset($details->img_path) }}" width="25%">
-                        <input type="file" accept=".jpg" class="form-control" id="img_path" name="img_path" placeholder="商品画像" value=" ">
+                        <img src="{{ asset('storage/'. $details->img_path) }}" width="25%">
+                        <input type="hidden" name="img_path" value="{{ $details->img_path }}">
+                        <input type="file" accept=".jpg" class="form-control" id="img_path" name="img_path" placeholder="商品画像" value="">
                         @if($errors->has('image'))
                             <p>{{ $errors->first('image') }}</p>
                         @endif

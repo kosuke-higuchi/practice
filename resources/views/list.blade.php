@@ -48,12 +48,12 @@
                                     <td>{{ $product->product_name }}</td>
                                     <td>{{ $product->price }}</td>
                                     <td>{{ $product->stock }}</td>
-                                    <td><img src="{{ asset($product->img_path) }}" width="25%"></td>
+                                    <td><img src="{{ asset('storage/'. $product->img_path) }}" width="25%"></td>
                                     <td><a href="{{ route('detail', ['id'=>$product->id]) }}" class="btn">詳細表示</a></td>
                                     <td>
-                                        <form action="{{ route('list.remove', ['id'=>$product->id], ['img_path'=>$product->img_path]) }}" method="POST">
+                                        <form action="{{ route('list.remove', ['id'=>$product->id], $product) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');">
                                         @csrf
-                                            <button type="submit" class="btn">削除</button>
+                                            <input type="submit" class="btn" value="削除">
                                         </form>
                                     </td>
                                 </tr>

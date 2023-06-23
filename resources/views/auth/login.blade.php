@@ -57,7 +57,7 @@
                                     ログイン
                                 </button>
 
-                                <button class="btn btn-primary">
+                                <button class="btn btn-primary" onclick="location.href='{{ route('register') }}'">
                                     新規登録
                                 </button>
                             </div>

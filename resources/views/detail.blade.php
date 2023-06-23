@@ -27,7 +27,7 @@
                             <td>{{ $details->product_name }}</td>
                             <td>{{ $details->price }}</td>
                             <td>{{ $details->stock }}</td>
-                            <td><img src="{{ asset($details->img_path) }}" width="25%"></td>
+                            <td><img src="{{ asset('storage/'. $details->img_path) }}" width="25%"></td>
                             <td>{{ $details->comment }}</td>
                         </tr>
                     </tbody>

@@ -7,15 +7,13 @@ use App\Models\Product;
 use App\Models\Company;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
     public function showList(Request $request) {
         $keyword = $request->input('keyword');
         $company_id = $request->input('company_id');
-
-        // ddd($company_id);
-
         $model  = new Company();
         $companies = $model->getlist();
         $model = new Product();
@@ -28,7 +26,6 @@ class ProductController extends Controller
             $products = $model->searchCompany($company_id);
         }
 
-
         return view('list', compact('products', 'keyword', 'companies'));
     }
 
@@ -36,12 +33,12 @@ class ProductController extends Controller
         $img = $request->file('img_path');
         $input = $request->all();
 
-        // $input = $request->only('product_name', 'product_name', 'price', 'stock', 'comment');
         if(isset($img)) {
             $img_name = $request->file('img_path')->getClientOriginalName();
             $request->file('img_path')->storeAs('public/img', $img_name);
-            $input['img_path'] = 'storage/img/'. $img_name; 
-            // ddd($input['img_path']);
+            $input['img_path'] = '/img/'. $img_name; 
+        } else {
+            $input['img_path'] = null;
         }
 
         DB::beginTransaction();
@@ -51,7 +48,7 @@ class ProductController extends Controller
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            ddd($e);
+            dd($e);
             return back();
         }
 
@@ -66,6 +63,11 @@ class ProductController extends Controller
     }
 
     public function removeList($id) {
+        $product = Product::findOrFail($id);
+        $remove_img = $product->img_path;
+        if(isset($remove_img)) {
+            Storage::disk('public')->delete($remove_img);
+        }
         $model = new Product();
         $model->destroy($id);
 
@@ -75,7 +77,6 @@ class ProductController extends Controller
     public function detailEdit($id) {
         $model = new Product();
         $details = $model->whereId($id);
-
         $model  = new Company();
         $companies = $model->getlist();
         
@@ -84,15 +85,16 @@ class ProductController extends Controller
 
     public function updateSubmit(ProductRequest $request, $id) {
         $img = $request->file('img_path');
+        $existing_img = $request->input('img_path');
         $input = $request->all();
-        // ddd($input);
         if(isset($img)) {
+            if(isset($existing_img)) {
+                Storage::disk('public')->delete($existing_img);
+            }
             $img_name = $request->file('img_path')->getClientOriginalName();
             $request->file('img_path')->storeAs('public/img', $img_name);
-            $input['img_path'] = 'storage/img/'. $img_name; 
-            // ddd($input['img_path']);
+            $input['img_path'] = '/img/'. $img_name; 
         }
-
         DB::beginTransaction();
         try {
             $model = new Product();
