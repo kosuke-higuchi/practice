@@ -27,7 +27,13 @@
                             <td>{{ $details->product_name }}</td>
                             <td>{{ $details->price }}</td>
                             <td>{{ $details->stock }}</td>
-                            <td><img src="{{ asset('storage/'. $details->img_path) }}" width="25%"></td>
+                            <td>
+                                @if ($details->img_path =='')
+                                    <img src="{{ asset('storage/img/no_image.jpg') }}" width="25%">
+                                @else
+                                    <img src="{{ asset('storage/'. $details->img_path) }}" width="25%">
+                                @endif
+                            </td>
                             <td>{{ $details->comment }}</td>
                         </tr>
                     </tbody>

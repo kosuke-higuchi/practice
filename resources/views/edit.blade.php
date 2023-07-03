@@ -63,7 +63,11 @@
 
                     <div class="form-group">
                         <label for="img_path">商品画像</label>
-                        <img src="{{ asset('storage/'. $details->img_path) }}" width="25%">
+                        @if ($details->img_path =='')
+                            <img src="{{ asset('storage/img/no_image.jpg') }}" width="25%">
+                        @else
+                            <img src="{{ asset('storage/'. $details->img_path) }}" width="25%">
+                        @endif
                         <input type="hidden" name="img_path" value="{{ $details->img_path }}">
                         <input type="file" accept=".jpg" class="form-control" id="img_path" name="img_path" placeholder="商品画像" value="">
                         @if($errors->has('image'))

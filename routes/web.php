@@ -28,3 +28,6 @@ Route::get('/detail/{id}', [App\Http\Controllers\ProductController::class, 'show
 Route::post('/remove{id}', [App\Http\Controllers\ProductController::class, 'removeList'])->name('list.remove');
 Route::get('/edit/{id}', [App\Http\Controllers\ProductController::class, 'detailEdit'])->name('edit');
 Route::post('/edit/{id}',[App\Http\Controllers\ProductController::class, 'updateSubmit'])->name('update');
+
+Route::get('/test', [App\Http\Controllers\ProductController::class, 'test'])->name('test');
+// Route::get('/iza', [App\Http\Controllers\ProductController::class, 'iza'])->name('iza');

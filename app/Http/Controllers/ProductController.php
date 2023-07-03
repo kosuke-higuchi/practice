@@ -8,6 +8,7 @@ use App\Models\Company;
 use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\Response;
 
 class ProductController extends Controller
 {
@@ -108,4 +109,29 @@ class ProductController extends Controller
 
         return redirect(route('edit', $id));
     }
+
+    // public function iza() {
+    //     $products = (new Product())->getList();
+
+    //     return response()->json($products);
+    // }
+
+    public function test(Request $request) {
+        $keyword = $request->input('keyword');
+        $company_id = $request->input('company_id');
+        $model  = new Company();
+        $companies = $model->getlist();
+        $model = new Product();
+        $products = $model->getlist();
+
+        if(isset($keyword)) {
+            $products = $model->searchList($keyword);
+        }
+        if(isset($company_id)) {
+            $products = $model->searchCompany($company_id);
+        }
+
+        return response()->json(compact('products', 'keyword', 'companies'));
+    }
+
 }
