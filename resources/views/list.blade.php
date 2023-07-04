@@ -9,6 +9,7 @@
                     商品情報一覧画面
                 </div>
 
+                <!-- ここから検索フォーム -->
                 <div>
                     <form id="search-form" action="{{ route('list') }}" method="GET">
                         <div>
@@ -25,10 +26,10 @@
                             </select>
                         </div>
                         <input id="search-button" type="submit" value="検索">
-                        <div id="product-list"></div>
                     </form>
                 </div>
 
+                <!-- ここから一覧表示 -->
                 <div class="links">
                     <table id="product-table">
                         <thead>
@@ -42,7 +43,8 @@
                             </tr>
                         </thead>
                         <tbody id="product-table-body">
-                            @foreach ($products as $product)
+                            <!-- JQueryで一覧表示 -->
+                            <!-- @foreach ($products as $product)
                                 <tr>
                                     <td>{{ $product->id }}</td>
                                     <td>{{ $product->company_name }}</td>
@@ -64,32 +66,12 @@
                                         </form>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @endforeach -->
                         </tbody>
                     </table>
                 </div>
-                <div class="main">
+                <div>
                     <!-- 空div -->
-                    <h2>Ajax</h2>
-                    <div class="links">
-                        <table id="product-table">
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>メーカー名</th>
-                                    <th>商品名</th>
-                                    <th>価格</th>
-                                    <th>在庫数</th>
-                                    <th>商品画像</th>
-                                </tr>
-                            </thead>
-                            <tbody id="test">
-                            </tbody>
-                        </table>
-                        <div>
-
-                        </div>
-                    </div>
                 </div>
                 <div>
                     <a class="links" href="{{ route('regist') }}">新規登録</a>

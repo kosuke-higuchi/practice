@@ -29,5 +29,5 @@ Route::post('/remove{id}', [App\Http\Controllers\ProductController::class, 'remo
 Route::get('/edit/{id}', [App\Http\Controllers\ProductController::class, 'detailEdit'])->name('edit');
 Route::post('/edit/{id}',[App\Http\Controllers\ProductController::class, 'updateSubmit'])->name('update');
 
-Route::get('/test', [App\Http\Controllers\ProductController::class, 'test'])->name('test');
+Route::get('/ajaxList', [App\Http\Controllers\ProductController::class, 'ajaxList'])->name('ajaxList');
 // Route::get('/iza', [App\Http\Controllers\ProductController::class, 'iza'])->name('iza');

@@ -116,7 +116,7 @@ class ProductController extends Controller
     //     return response()->json($products);
     // }
 
-    public function test(Request $request) {
+    public function ajaxList(Request $request) {
         $keyword = $request->input('keyword');
         $company_id = $request->input('company_id');
         $model  = new Company();
