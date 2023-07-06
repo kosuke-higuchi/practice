@@ -1,0 +1,9 @@
+.list-img {
+    width: 15%;
+}
+.list-img img {
+    width: 100%;
+}
+.cursor-change {
+    cursor: pointer;
+}

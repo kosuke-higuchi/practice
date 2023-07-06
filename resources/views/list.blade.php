@@ -11,7 +11,7 @@
 
                 <!-- ここから検索フォーム -->
                 <div>
-                    <form id="search-form" action="{{ route('list') }}" method="GET">
+                    <form id="searchForm" action="{{ route('list') }}" method="GET">
                         <div>
                             <label>キーワード</label>
                             <input type="text" id="keyword" name="keyword" value="">                            
@@ -25,48 +25,35 @@
                             @endforeach
                             </select>
                         </div>
-                        <input id="search-button" type="submit" value="検索">
+                        <div>
+                            <label>値段</label>
+                            <input type="text" id="min_price" name="min_price" placeholder="下限" value="">
+                            <input type="text" id="max_price" name="max_price" placeholder="上限" value="">
+                        </div>
+                        <div>
+                            <label>在庫数</label>
+                            <input type="text" id="min_stock" name="min_stock" placeholder="下限" value="">
+                            <input type="text" id="max_stock" name="max_stock" placeholder="上限" value="">
+                        </div>
+                        <input id="searchButton" type="submit" value="検索">
                     </form>
                 </div>
 
                 <!-- ここから一覧表示 -->
                 <div class="links">
-                    <table id="product-table">
+                    <table id="productTable">
                         <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>メーカー名</th>
-                                <th>商品名</th>
-                                <th>価格</th>
-                                <th>在庫数</th>
+                            <tr id="sortTarget">
+                                <th id="0" class="cursor-change" data-sort="">id</th>
+                                <th id="1" class="cursor-change" data-sort="">メーカー名</th>
+                                <th id="2" class="cursor-change" data-sort="">商品名</th>
+                                <th id="3" class="cursor-change" data-sort="">価格</th>
+                                <th id="4" class="cursor-change" data-sort="">在庫数</th>
                                 <th>商品画像</th>
                             </tr>
                         </thead>
-                        <tbody id="product-table-body">
+                        <tbody id="productTableBody">
                             <!-- JQueryで一覧表示 -->
-                            <!-- @foreach ($products as $product)
-                                <tr>
-                                    <td>{{ $product->id }}</td>
-                                    <td>{{ $product->company_name }}</td>
-                                    <td>{{ $product->product_name }}</td>
-                                    <td>{{ $product->price }}</td>
-                                    <td>{{ $product->stock }}</td>
-                                    <td>
-                                        @if ($product->img_path =='')
-                                            <img src="{{ asset('storage/img/no_image.jpg') }}" width="25%">
-                                        @else
-                                            <img src="{{ asset('storage/'. $product->img_path) }}" width="25%">
-                                        @endif
-                                    </td>
-                                    <td><a href="{{ route('detail', ['id'=>$product->id]) }}" class="btn">詳細表示</a></td>
-                                    <td>
-                                        <form action="{{ route('list.remove', ['id'=>$product->id], $product) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');">
-                                        @csrf
-                                            <input type="submit" class="btn" value="削除">
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach -->
                         </tbody>
                     </table>
                 </div>

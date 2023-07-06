@@ -72,7 +72,7 @@ class ProductController extends Controller
         $model = new Product();
         $model->destroy($id);
 
-        return redirect(route('list'));
+        return redirect(route('ajaxList'));
     }
 
     public function detailEdit($id) {
@@ -110,26 +110,31 @@ class ProductController extends Controller
         return redirect(route('edit', $id));
     }
 
-    // public function iza() {
-    //     $products = (new Product())->getList();
-
-    //     return response()->json($products);
-    // }
-
     public function ajaxList(Request $request) {
         $keyword = $request->input('keyword');
         $company_id = $request->input('company_id');
+        $minPrice = $request->input('min_price') ?: 0;
+        $maxPrice = $request->input('max_price') ?: 999999;
+        $minStock = $request->input('min_stock') ?: 0;
+        $maxStock = $request->input('max_stock') ?: 999999;
+
         $model  = new Company();
         $companies = $model->getlist();
         $model = new Product();
-        $products = $model->getlist();
 
-        if(isset($keyword)) {
-            $products = $model->searchList($keyword);
+        if (isset($keyword) && isset($company_id)) {
+            $search = $model->searchListAndCompany($keyword, $company_id);
+        } elseif (isset($keyword)) {
+            $search = $model->searchList($keyword);
+        } elseif (isset($company_id)) {
+            $search = $model->searchCompany($company_id);
+        } else {
+            $search = $model->getlist();
         }
-        if(isset($company_id)) {
-            $products = $model->searchCompany($company_id);
-        }
+
+        $search = $model->filterByPriceAndStockRange($search, $minPrice, $maxPrice, $minStock, $maxStock);
+
+        $products = $search;
 
         return response()->json(compact('products', 'keyword', 'companies'));
     }

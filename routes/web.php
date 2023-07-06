@@ -25,9 +25,8 @@ Route::get('/list', [App\Http\Controllers\ProductController::class, 'showList'])
 Route::get('/regist', [App\Http\Controllers\CompanyController::class, 'showRegistForm'])->name('regist');
 Route::post('/regist', [App\Http\Controllers\ProductController::class, 'registSubmit'])->name('regist.submit');
 Route::get('/detail/{id}', [App\Http\Controllers\ProductController::class, 'showDetail'])->name('detail');
-Route::post('/remove{id}', [App\Http\Controllers\ProductController::class, 'removeList'])->name('list.remove');
+Route::post('/remove/{id}', [App\Http\Controllers\ProductController::class, 'removeList'])->name('list.remove');
 Route::get('/edit/{id}', [App\Http\Controllers\ProductController::class, 'detailEdit'])->name('edit');
 Route::post('/edit/{id}',[App\Http\Controllers\ProductController::class, 'updateSubmit'])->name('update');
 
 Route::get('/ajaxList', [App\Http\Controllers\ProductController::class, 'ajaxList'])->name('ajaxList');
-// Route::get('/iza', [App\Http\Controllers\ProductController::class, 'iza'])->name('iza');
