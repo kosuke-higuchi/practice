@@ -18,42 +18,27 @@ class Product extends Model
         return $products;
     }
 
-    public function searchList($keyword) {
-        $products = DB::table('products')
-        ->join('companies', 'products.company_id', '=', 'companies.id')
-        ->select('products.id','company_name','product_name','price','stock','comment','img_path')
-        ->where('product_name', 'LIKE', "%{$keyword}%")
-        ->get();
-
-        return $products;
+    // ローカルスコープ
+    // 一覧表示
+    public function scopeList($query) {
+        return $query->join('companies', 'products.company_id', '=', 'companies.id')
+        ->select('products.id','company_name','product_name','price','stock','comment','img_path');
     }
 
-    public function searchCompany($company) {
-        $products = DB::table('products')
-        ->join('companies', 'products.company_id', '=', 'companies.id')
-        ->select('products.id','company_name','product_name','price','stock','comment','img_path')
-        ->where('company_id', 'LIKE', $company)
-        ->get();
-
-        return $products;
+    // 商品名検索
+    public function scopeSearchList($query, $keyword) {
+        return $query->where('product_name', 'LIKE', "%{$keyword}%");
     }
 
-    public function searchListAndCompany($keyword, $company_id) {
-        $products = DB::table('products')
-            ->join('companies', 'products.company_id', '=', 'companies.id')
-            ->select('products.id', 'company_name', 'product_name', 'price', 'stock', 'comment', 'img_path')
-            ->where('product_name', 'LIKE', "%{$keyword}%")
-            ->where('company_id', $company_id)
-            ->get();
-    
-        return $products;
+    // メーカー名検索
+    public function scopeSearchCompany($query, $company) {
+        return $query->where('company_id', 'LIKE', $company);
     }
 
-    public function filterByPriceAndStockRange($search, $minPrice, $maxPrice, $minStock, $maxStock) {
-        $search = $search->whereBetween('price', [$minPrice, $maxPrice])
+    // 価格、在庫数検索
+    public function scopeFilterByPriceAndStockRange($query, $minPrice, $maxPrice, $minStock, $maxStock) {
+        return $query->whereBetween('price', [$minPrice, $maxPrice])
             ->whereBetween('stock', [$minStock, $maxStock]);
-
-        return $search;
     }
 
     public function registProduct($input) {

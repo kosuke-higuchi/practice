@@ -1,9 +1,11 @@
 $(document).ready(function(){
+    // 商品一覧表示する関数の呼び出し
     fetchProductList();
 
     // 検索
     $('#searchForm').on('submit', function(e) {
-        e.preventDefault(); // デフォルトのフォーム送信をキャンセルする
+        // デフォルトのフォーム送信をキャンセルする
+        e.preventDefault(); 
         // 入力された検索条件を取得
         var keyword = $('#keyword').val();
         var companyId = $('#company_id').val();
@@ -12,10 +14,10 @@ $(document).ready(function(){
         var minStock = $('#min_stock').val();
         var maxStock = $('#max_stock').val();
     
-        // 商品一覧を非同期で取得する関数の呼び出し
         fetchProductList(keyword, companyId, minPrice, maxPrice, minStock, maxStock);
     });
-
+    
+    // 商品一覧を非同期で取得する関数の呼び出し
     function fetchProductList(keyword = '', companyId = '', minPrice = '', maxPrice = '', minStock = '', maxStock = '') {
         var searchData = {
             keyword: keyword,
@@ -25,6 +27,8 @@ $(document).ready(function(){
             min_stock: minStock,
             max_stock: maxStock
         };
+
+        // 基本的なurlを代入
         var url = 'http://localhost:8888/practice/public';
 
         // console.log(searchData);
@@ -37,6 +41,7 @@ $(document).ready(function(){
                 // 返ってきたデータの確認
                 console.log(index);
                 console.log(searchData);
+                
                 var imgUrl = url + '/storage';
                 var products = index.products;
                 var list = '';
@@ -54,7 +59,7 @@ $(document).ready(function(){
                     } else {
                         list += '<td class="list-img"><img src="' + imgUrl + product.img_path + '"></td>';
                     }
-                    list += '<td><a href=' + url + '"/detail/' + product.id + '" class="btn">詳細表示</a></td>';
+                    list += '<td><a href=' + url + '/detail/' + product.id + 'class="btn">詳細表示</a></td>';
                     
                     list += '<td id="deleteTarget"><form action="' + url + '/remove/' + product.id + '" method="POST"><input type="submit" class="btn" value="削除"></form></td>';
                     list += '</tr>';
@@ -64,39 +69,44 @@ $(document).ready(function(){
 
             },
             error:function(xhr, status, error){
-            alert('通信の失敗をしました');
-            console.log(error);
+                alert('通信の失敗をしました');
+                console.log(error);
             }
         });
     }
 
     // 商品の削除
     $(document).on('submit', '#deleteTarget form', function(e) {
-        e.preventDefault(); // デフォルトのフォーム送信をキャンセルする
+        // デフォルトのフォーム送信をキャンセルする
+        e.preventDefault(); 
         var deleteForm = $(this);
+        //action属性内取得
         var delUrl = deleteForm.attr('action');
-        console.log(deleteForm);
+        // 確認ダイアログを表示し、削除を確認する
+        var confirmation = confirm('本当に削除しますか？');
+        if (confirmation) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
 
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: delUrl,
-            type: "POST",
-            dataType: "json",
-            success: function(response) {
-                // 削除成功時の処理
-                console.log(response);
-                // 商品一覧を再読み込み
-                fetchProductList();
-            },
-            error: function(xhr, status, error) {
-                alert('削除の通信に失敗しました');
-                console.log(error);
-            }
-        });
+            $.ajax({
+                url: delUrl,
+                type: "POST",
+                dataType: "json",
+                success: function(response) {
+                    // 削除成功時の処理
+                    console.log(response);
+                    // 商品一覧を再読み込み
+                    fetchProductList();
+                },
+                error: function(xhr, status, error) {
+                    alert('削除の通信に失敗しました');
+                    console.log(error);
+                }
+            });
+        }
     });
 
 
@@ -155,24 +165,24 @@ $(document).ready(function(){
 
     // 削除
 
-    function deleteProduct(productId) {
-        $.ajax({
-          url: url + '/remove/' + productId,
-          type: 'POST',
-          data: {
-            _method: 'DELETE' // Laravelの場合、DELETEリクエストを送信する際には_methodパラメータにDELETEを指定する必要がある場合があります
-          },
-          dataType: 'json',
-          success: function(response) {
-            // 削除成功時に商品一覧を再取得
-            fetchProductList();
-          },
-          error: function(xhr, status, error) {
-            alert('削除に失敗しました');
-            console.log(error);
-          }
-        });
-      }
+    // function deleteProduct(productId) {
+    //     $.ajax({
+    //       url: url + '/remove/' + productId,
+    //       type: 'POST',
+    //       data: {
+    //         _method: 'DELETE' // Laravelの場合、DELETEリクエストを送信する際には_methodパラメータにDELETEを指定する必要がある場合があります
+    //       },
+    //       dataType: 'json',
+    //       success: function(response) {
+    //         // 削除成功時に商品一覧を再取得
+    //         fetchProductList();
+    //       },
+    //       error: function(xhr, status, error) {
+    //         alert('削除に失敗しました');
+    //         console.log(error);
+    //       }
+    //     });
+    //   }
 
 
 

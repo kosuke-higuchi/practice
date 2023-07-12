@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Sale;
-use Illuminate\Http\Request;
 
 class SaleController extends Controller
 {
@@ -25,8 +26,8 @@ class SaleController extends Controller
         }
     }
 
-    public function test(Request $request) {
-        $test = '確認です';
-        return view('test', compact('test'));
+    public function test() {
+        return response()->json(['message' => '確認しました']);
     }
+
 }

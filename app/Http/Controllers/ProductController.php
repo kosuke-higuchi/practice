@@ -113,28 +113,50 @@ class ProductController extends Controller
     public function ajaxList(Request $request) {
         $keyword = $request->input('keyword');
         $company_id = $request->input('company_id');
-        $minPrice = $request->input('min_price') ?: 0;
-        $maxPrice = $request->input('max_price') ?: 999999;
-        $minStock = $request->input('min_stock') ?: 0;
-        $maxStock = $request->input('max_stock') ?: 999999;
+        $minPrice = $request->input('min_price');
+        $maxPrice = $request->input('max_price');
+        $minStock = $request->input('min_stock');
+        $maxStock = $request->input('max_stock');
 
         $model  = new Company();
         $companies = $model->getlist();
-        $model = new Product();
+        // $model = new Product();
+        // $search = $model->getlist();
 
-        if (isset($keyword) && isset($company_id)) {
-            $search = $model->searchListAndCompany($keyword, $company_id);
-        } elseif (isset($keyword)) {
-            $search = $model->searchList($keyword);
-        } elseif (isset($company_id)) {
-            $search = $model->searchCompany($company_id);
-        } else {
-            $search = $model->getlist();
+        // if (isset($minPrice) || isset($maxPrice) || isset($minStock) || isset($maxStock)) {
+        //     $minPrice = $request->input('min_price') ?: 0;
+        //     $maxPrice = $request->input('max_price') ?: 999999;
+        //     $minStock = $request->input('min_stock') ?: 0;
+        //     $maxStock = $request->input('max_stock') ?: 999999;
+        //     $search = $model->filterByPriceAndStockRange($minPrice, $maxPrice, $minStock, $maxStock);
+        // }
+        // if (isset($keyword) && isset($company_id)) {
+        //     $search = $model->searchListAndCompany($keyword, $company_id);
+        // } elseif (isset($keyword)) {
+        //     $search = $model->searchList($keyword);
+        // } elseif (isset($company_id)) {
+        //     $search = $model->searchCompany($company_id);
+        // }
+            
+        $search = Product::list();
+        if (isset($company_id)) {
+                $search->searchCompany($company_id);
+            }
+        if (isset($keyword)) {
+            $search->searchList($keyword);
         }
 
-        $search = $model->filterByPriceAndStockRange($search, $minPrice, $maxPrice, $minStock, $maxStock);
+        if (isset($minPrice) || isset($maxPrice) || isset($minStock) || isset($maxStock)) {
+            $minPrice = $request->input('min_price') ?: 0;
+            $maxPrice = $request->input('max_price') ?: 999999;
+            $minStock = $request->input('min_stock') ?: 0;
+            $maxStock = $request->input('max_stock') ?: 999999;
 
-        $products = $search;
+            $search->filterByPriceAndStockRange($minPrice, $maxPrice, $minStock, $maxStock);
+        }
+
+        $products = $search->get();
+
 
         return response()->json(compact('products', 'keyword', 'companies'));
     }
