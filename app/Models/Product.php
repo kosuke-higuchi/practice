@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class Product extends Model
 {
+    public function sales() {
+        return $this->hasMany(Sale::class);
+    }
+
     public function getList() {
         $products = DB::table('products')
         ->join('companies', 'products.company_id', '=', 'companies.id')

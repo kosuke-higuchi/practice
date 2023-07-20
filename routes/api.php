@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/purchase', [SaleController::class, 'processPurchase']);
+//変更
+Route::get('/purchase', [App\Http\Controllers\API\SaleController::class, 'processPurchase']);
 
 Route::get('/test', [SaleController::class, 'test']);
