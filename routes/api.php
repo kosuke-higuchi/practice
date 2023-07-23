@@ -20,6 +20,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //変更
-Route::get('/purchase', [App\Http\Controllers\API\SaleController::class, 'processPurchase']);
+Route::post('/purchase', [App\Http\Controllers\API\SaleController::class, 'processPurchase'])->withoutMiddleware(['auth']);
 
-Route::get('/test', [SaleController::class, 'test']);
+Route::get('/test', [SaleController::class, 'test'])->withoutMiddleware(['auth']);
