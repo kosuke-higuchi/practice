@@ -12,28 +12,37 @@ class SaleController extends Controller
 {
     public function processPurchase(Request $request)
     {
-        $productId = $request->input('product_id');
-        $product = Product::find($productId);
+        // トランザクション開始
+        DB::beginTransaction();
+        try {
+            $productId = $request->input('product_id');
+            $product = Product::find($productId);
 
-        if (!$product) {
-            return response()->json(['error' => '指定された商品が見つかりません。'], 404);
-        }
+            // 商品が見つからない場合
+            if (!$product) {
+                DB::rollback();
+                return response()->json(['error' => '指定された商品が見つかりません。'], 404);
+            }
+            // 在庫不足の場合
+            if ($product->stock < 1) {
+                DB::rollback();
+                return response()->json(['error' => '在庫が不足しています。'], 400);
+            }
 
-        if ($product->stock < 1) {
-            return response()->json(['error' => '在庫が不足しています。'], 400);
-        }
+            // 在庫数を減らす
+            $product->decrement('stock');
+            $sale = DB::table('sales')->insert([
+                'product_id' => $productId,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
 
-        $product->decrement('stock');
-        //書き換え
-        $sale =DB::table('sales')
-            ->insert([ 'product_id' => $productId, 'created_at' => NOW(), 'updated_at' => NOW(), ]);
             DB::commit();
-
-        return response()->json(['message' => '購入が完了しました。', 'sale' => $sale]);
+            return response()->json(['message' => '購入が完了しました。', 'sale' => $sale]);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => 'エラーが発生しました。'], 500);
+        }
     }
     
-    public function test() {
-        return response()->json("確認しました");
-    }
-
 }
